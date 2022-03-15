@@ -7,7 +7,7 @@
 
 # As of version 2.2 this Makefile expects an asan.c file to be present in the
 # asan folder inside the SRC_ROOT directory. A copy of the file is provided
-# with the Makefile. Also it now uses clang instead of gcc.
+# with the Makefile
 
 # This makefile can be copied to a directory and it will generate the file
 # structure and initialize a git repository with the .init rule. Any variables
@@ -23,11 +23,13 @@
 ################################################################################
 
 # Name of a single binary. Add as many variables as required by the project
-NAME1 := chips
+NAME1 := libft.a
 
 # The names of all the binaries. Add aditional variables created above separated
 # by space.
 NAMES := ${NAME1}
+
+AR = ar rcs
 
 ################################################################################
 # Configs
@@ -50,11 +52,7 @@ VERBOSE := 1
 # in others. If for example you just want to clean the root directory the clean
 # rule will be executed in any other makefile specified. You can deactivate the
 # creation of these targets by setting the bellow variable to 0.
-CREATE_LIB_TARGETS := 1
-
-# Minilibx to be selected when running in mac.
-# Possible values are: mms, opengl (default: mms)
-MLX = mms
+# CREATE_LIB_TARGETS := 0
 
 ################################################################################
 # Compiler & Flags
@@ -76,10 +74,10 @@ ASAN += -fsanitize=pointer-subtract -fsanitize=pointer-compare
 # Technicaly UBSan but works with ASan
 ASAN += -fsanitize=undefined
 # Technicaly LSan but works with ASan
- ASAN += -fsanitize=leak
+ASAN += -fsanitize=leak
 # Thread sanitizing flags
 TSAN := -fsanitize=thread
-# Memory sanitizing flags
+# Memory sanitizer flags
 MSAN := -fsanitize=memory -fsanitize-memory-track-origins
 
 ################################################################################
@@ -98,34 +96,34 @@ SRC_ROOT := src/
 ################################################################################
 
 # Libft
-LIBFT_ROOT := ${LIB_ROOT}libft/
-LIBFT_INC := ${LIBFT_ROOT}inc/
-LIBFT := ${LIBFT_ROOT}bin/libft.a
+# LIBFT_ROOT := ${LIB_ROOT}libft/
+# LIBFT_INC := ${LIBFT_ROOT}inc/
+# LIBFT := ${LIBFT_ROOT}bin/libft.a
 
-INC_DIRS += ${LIBFT_INC}
-LIBS += -L${LIBFT_ROOT}bin -lft
+# INC_DIRS += ${LIBFT_INC}
+# LIBS += -L${LIBFT_ROOT}bin -lft
 
 # Libraries for which to create default targets. All libraries in this list will
 # have targets created autimatically. The targets that are created are set in
 # DEFAULT_LIB_RULES. The targets will have to format <library root>//<target>
 # and it will invoke make as follows:
 # `make -C <library root> <rule>`
-DEFAULT_LIBS := ${LIBFT_ROOT}
+# DEFAULT_LIBS := ${LIBFT_ROOT}
 
 # Default targets to create for libraries specified in DEFAULT_LIBS. This is a
 # small list of common targets in most makefiles.
-DEFAULT_LIB_RULES := all clean re
+# DEFAULT_LIB_RULES := all clean re
 
 # All projects with a copy of this makefile v2.1 and up ate garanteed to work
 # with these targets. If you wish to not use them just comment the lines you
 # don't want.
-DEFAULT_LIB_RULES += fclean clean_all clean_dep
-DEFAULT_LIB_RULES += debug debug_re debug_asan debug_asan_re
+# DEFAULT_LIB_RULES += fclean clean_all clean_dep
+# DEFAULT_LIB_RULES += debug debug_re debug_asan debug_asan_re
 
 # All projects with a copy of this makefile v2.2 and up ate garanteed to work
 # with these targets. If you wish to not use them just comment the lines you
 # don't want.
-DEFAULT_LIB_RULES += debug_tsan debug_tsan_re debug_msan debug_msan_re
+# DEFAULT_LIB_RULES += debug_tsan debug_tsan_re debug_msan debug_msan_re
 
 ################################################################################
 # Content Folders
@@ -138,7 +136,8 @@ DEFAULT_LIB_RULES += debug_tsan debug_tsan_re debug_msan debug_msan_re
 # Exemple:
 # DIRS := folder1/:folder2/
 # DIRS += folder1/:folder3/:folder4/
-DIRS := ./:gui/:logic/:map/:listeners/:logic/enemies/
+DIRS := ctype/:data_struct/list/:norm/:stdio/:stdlib/:string/:conv/:$\
+	data_struct/stack/:sort/
 
 SRC_DIRS_LIST := $(addprefix ${SRC_ROOT},${DIRS})
 SRC_DIRS_LIST := $(foreach dl,${SRC_DIRS_LIST},$(subst :,:${SRC_ROOT},${dl}))
@@ -173,24 +172,8 @@ BINS := ${addprefix ${BIN_ROOT},${NAMES}}
 ################################################################################
 
 ifeq ($(shell uname),Linux)
-	MLX_LIB_ROOT := ${LIB_ROOT}minilibx-linux/
-	MLX_LIB := ${MLX_LIB_ROOT}libmlx.a
-	INCS += -I${MLX_LIB_ROOT}
-	LIBS += -L${MLX_LIB_ROOT} -lmlx
-	LIBS += -L/usr/lib -lXext -lX11 -lm -lz
 	SED := sed -i.tmp --expression
 else ifeq ($(shell uname),Darwin)
-	ifeq (${MLX}, opengl)
-		MLX_LIB_ROOT := ${LIB_ROOT}minilibx_opengl_20191021/
-		LIBS += -L${MLX_LIB_ROOT} -lmlx
-		LIBS += -framework OpenGL -framework AppKit -lz
-		MLX_LIB := ${MLX_LIB_ROOT}libmlx.dylib
-	else ifeq (${MLX}, mms)
-		MLX_LIB_ROOT := ${LIB_ROOT}minilibx_mms_20200219/
-		LIBS += -L${MLX_LIB_ROOT} -lmlx
-		MLX_LIB := ${MLX_LIB_ROOT}libmlx.dylib
-	endif
-	INCS += $(addprefix -I, ${MLX_LIB_ROOT})
 	SED := sed -i.tmp
 endif
 
@@ -205,9 +188,9 @@ else ifeq ($(VERBOSE),4)
 	MAKEFLAGS += --debug=v
 endif
 
-ifeq (${CREATE_LIB_TARGETS},0)
-	undefine DEFAULT_LIBS
-endif
+# ifeq (${CREATE_LIB_TARGETS},0)
+# 	undefine DEFAULT_LIBS
+# endif
 
 ################################################################################
 # VPATHS
@@ -225,15 +208,10 @@ vpath %.d $(DEP_DIRS)
 all: ${BINS}
 
 .SECONDEXPANSION:
-${BIN_ROOT}${NAME1}: ${LIBFT} ${MLX_LIB} $$(call get_files,$${@F},$${OBJS_LIST})
+${BIN_ROOT}${NAME1}: $$(call get_files,$${@F},$${OBJS_LIST})
 	${AT}printf "\033[33m[CREATING ${@F}]\033[0m\n" ${BLOCK}
 	${AT}mkdir -p ${@D} ${BLOCK}
-	${AT}${CC} ${CFLAGS} ${INCS} ${ASAN_FILE}\
-		$(call get_files,${@F},${OBJS_LIST}) ${LIBS} -o $@ ${BLOCK}
-
-${MLX_LIB}: ; make -C ${MLX_LIB_ROOT}
-
-${LIBFT}: $$(call get_lib_target,$${DEFAULT_LIBS},all) ;
+	${AT}${AR} $@ $^ ${BLOCK}
 
 ################################################################################
 # Clean Targets
@@ -269,13 +247,8 @@ re: fclean all
 debug: CFLAGS += ${DFLAGS}
 debug: $$(call get_lib_target,$${DEFAULT_LIBS},$$@) all
 
-obj/asan/asan.o: src/asan/asan.c
-	${AT}mkdir -p ${@D} ${BLOCK}
-	${AT}${CC} -o $@ -c $< ${BLOCK}
-
 debug_asan: CFLAGS += ${DFLAGS} ${ASAN}
-debug_asan: ASAN_FILE = obj/asan/asan.o
-debug_asan: $$(call get_lib_target,$${DEFAULT_LIBS},$$@) obj/asan/asan.o all
+debug_asan: $$(call get_lib_target,$${DEFAULT_LIBS},$$@) all
 
 debug_tsan: CFLAGS += ${DFLAGS} ${TSAN}
 debug_tsan: $$(call get_lib_target,$${DEFAULT_LIBS},$$@) all
@@ -314,9 +287,6 @@ debug_msan_re: fclean debug_msan
 
 # Meta target to force a target to be executed
 .FORCE: ;
-
-# Print a specifique variable
-print-%: ; @echo $*=$($*)
 
 # List all the targets in alphabetical order
 targets:

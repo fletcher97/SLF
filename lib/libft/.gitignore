@@ -1,6 +1,7 @@
 *.o
 *.d
+*.a
+*.so
 .vscode
 a.out
-.DS_Store
-bin/
+mytest
