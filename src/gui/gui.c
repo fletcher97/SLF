@@ -6,7 +6,7 @@
 /*   By: fletcher <fletcher@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 15:17:41 by fletcher          #+#    #+#             */
-/*   Updated: 2022/03/13 19:48:28 by fletcher         ###   ########.fr       */
+/*   Updated: 2022/03/16 14:17:58 by fletcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #include "ft_string.h"
 
+#include "logic.h"
 #include "gui.h"
 #include "map.h"
 
@@ -85,7 +86,7 @@ void	render_enteties(t_app *app)
 			enemy->y + (4 - app->game.player.y));
 		enemies = enemies->next;
 	}
-	put_tile(&app->screen, 4, 4, 0);
+	render_player(app);
 }
 
 void	render(t_app *app)

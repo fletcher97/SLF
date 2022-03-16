@@ -6,7 +6,7 @@
 /*   By: fletcher <fletcher@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 00:36:28 by mgueifao          #+#    #+#             */
-/*   Updated: 2022/03/13 19:41:04 by fletcher         ###   ########.fr       */
+/*   Updated: 2022/03/16 14:20:34 by fletcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@
 
 # define TICK_RATE 6
 
-void	tick(t_game *app);
 void	move(t_game *app);
+void	update_player(t_game *p);
+void	render_player(t_app *a);
 
 #endif
