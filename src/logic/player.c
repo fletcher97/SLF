@@ -6,7 +6,7 @@
 /*   By: fletcher <fletcher@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 14:08:35 by fletcher          #+#    #+#             */
-/*   Updated: 2022/03/16 14:24:34 by fletcher         ###   ########.fr       */
+/*   Updated: 2022/03/16 15:43:31 by fletcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,37 +16,93 @@
 #include "map.h"
 #include "gui.h"
 
-void update_player(t_game *p)
+static int can_walk(int x, int y, t_game *g)
+{
+	if (!is_solid(g->map[y][x]))
+		return (1);
+	if (g->map[y][x] == GATE && !g->coll_left)
+		return (1);
+	if (g->map[y][x] == RDOOR && g->player.inv.rkey)
+		return (1);
+	if (g->map[y][x] == GDOOR && g->player.inv.gkey)
+		return (1);
+	if (g->map[y][x] == BDOOR && g->player.inv.bkey)
+		return (1);
+	if (g->map[y][x] == YDOOR && g->player.inv.ykey)
+		return (1);
+	return (0);
+}
+
+void update_player(t_game *g)
 {
 	int new_x;
 	int new_y;
 
-	new_x = p->player.x + p->player.x_mov;
-	new_y = p->player.y + p->player.y_mov;
-	if (new_x != p->player.x && new_x >= 0 && new_x < p->width && (!is_solid(p->map[p->player.y][new_x]) || (p->map[p->player.y][new_x] == GATE && !p->coll_left)))
+	new_x = g->player.x + g->player.x_mov;
+	new_y = g->player.y + g->player.y_mov;
+	if (new_x != g->player.x && new_x >= 0 && new_x < g->width && can_walk(new_x, g->player.y, g))
 	{
-		p->player.dir = new_x > p->player.x ? 3 : 1;
-		p->player.x = new_x;
+		g->player.dir = new_x > g->player.x ? 3 : 1;
+		g->player.x = new_x;
 	}
-	else if (new_y != p->player.y && new_y >= 0 && new_y < p->height && (!is_solid(p->map[new_y][p->player.x]) || (p->map[new_y][p->player.x] == GATE && !p->coll_left)))
+	else if (new_y != g->player.y && new_y >= 0 && new_y < g->height && can_walk(g->player.x, new_y, g))
 	{
-		p->player.dir = new_y > p->player.y ? 0 : 2;
-		p->player.y = new_y;
+		g->player.dir = new_y > g->player.y ? 0 : 2;
+		g->player.y = new_y;
 	}
-	if (p->map[p->player.y][p->player.x] == CHIP)
+	if (g->map[g->player.y][g->player.x] == CHIP)
 	{
-		p->map[p->player.y][p->player.x] = VOID;
-		p->coll_left--;
-		printf("%d left\n", p->coll_left);
+		g->map[g->player.y][g->player.x] = VOID;
+		g->coll_left--;
+		printf("%d left\n", g->coll_left);
 	}
-	else if (p->map[p->player.y][p->player.x] == EXIT)
+	else if (g->map[g->player.y][g->player.x] == EXIT)
 	{
 		printf("You  won!!!\n");
-		p->player.dead = 2;
+		g->player.dead = 2;
 	}
-	else if (p->map[p->player.y][p->player.x] == GATE && !p->coll_left)
+	else if (g->map[g->player.y][g->player.x] == GATE && !g->coll_left)
 	{
-		p->map[p->player.y][p->player.x] = VOID;
+		g->map[g->player.y][g->player.x] = VOID;
+	}
+	else if (g->map[g->player.y][g->player.x] == RDOOR && g->player.inv.rkey)
+	{
+		g->map[g->player.y][g->player.x] = VOID;
+		g->player.inv.rkey--;
+	}
+	else if (g->map[g->player.y][g->player.x] == GDOOR && g->player.inv.gkey)
+	{
+		g->map[g->player.y][g->player.x] = VOID;
+	}
+	else if (g->map[g->player.y][g->player.x] == BDOOR && g->player.inv.bkey)
+	{
+		g->map[g->player.y][g->player.x] = VOID;
+		g->player.inv.bkey--;
+	}
+	else if (g->map[g->player.y][g->player.x] == YDOOR && g->player.inv.ykey)
+	{
+		g->map[g->player.y][g->player.x] = VOID;
+		g->player.inv.ykey--;
+	}
+	else if (g->map[g->player.y][g->player.x] == RKEY)
+	{
+		g->map[g->player.y][g->player.x] = VOID;
+		g->player.inv.rkey++;
+	}
+	else if (g->map[g->player.y][g->player.x] == GKEY)
+	{
+		g->map[g->player.y][g->player.x] = VOID;
+		g->player.inv.gkey = 1;
+	}
+	else if (g->map[g->player.y][g->player.x] == BKEY)
+	{
+		g->map[g->player.y][g->player.x] = VOID;
+		g->player.inv.bkey++;
+	}
+	else if (g->map[g->player.y][g->player.x] == YKEY)
+	{
+		g->map[g->player.y][g->player.x] = VOID;
+		g->player.inv.ykey++;
 	}
 }
 

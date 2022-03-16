@@ -6,7 +6,7 @@
 /*   By: fletcher <fletcher@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/11 19:19:34 by mgueifao          #+#    #+#             */
-/*   Updated: 2022/03/13 20:33:27 by fletcher         ###   ########.fr       */
+/*   Updated: 2022/03/16 15:15:14 by fletcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,19 @@ typedef struct s_enemy
 	int (*render)(void *, int, int);
 }				t_enemy;
 
+typedef struct s_inventory
+{
+	char	rkey;
+	char	gkey;
+	char	bkey;
+	char	ykey;
+	char	boots;
+}				t_inventory;
+
 
 typedef struct s_player
 {
+	t_inventory inv;
 	int	x;
 	int	y;
 	int	x_mov;
