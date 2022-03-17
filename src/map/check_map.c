@@ -6,11 +6,11 @@
 /*   By: fletcher <fletcher@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/15 17:44:12 by mgueifao          #+#    #+#             */
-/*   Updated: 2022/03/13 14:10:35 by fletcher         ###   ########.fr       */
+/*   Updated: 2022/03/17 13:29:14 by fletcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "unistd.h"
+#include <unistd.h>
 #include <fcntl.h>
 
 #include "ft_stdio.h"
@@ -64,7 +64,9 @@ static int	check_cont(const char *map)
 		{
 			if (!ft_strchr(MAP_CHARS, *curr) && curr)
 			{
-				ft_putstr_fd("Error\nMap contains unknown char.\n", STDERR);
+				ft_putstr_fd("Error\nMap contains unknown char \'", STDERR);
+				write(STDERR, curr, 1);
+				ft_putstr_fd("\'.\n", STDERR);
 				ft_free(line);
 				return (close(fd) && 0);
 			}
