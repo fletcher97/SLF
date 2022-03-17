@@ -13,6 +13,8 @@
 #include "so_long.h"
 #include "mlx_keys.h"
 
+#define CLASP(x) (x = (x < 0 ? -1 : x > 0 ? 1 : 0))
+
 int	stop(void *param)
 {
 	t_app	*app;
@@ -37,6 +39,8 @@ int	on_key_press(int key, void *param)
 		app->game.player.x_mov += 1;
 	else if (key == MLX_KEY_A)
 		app->game.player.x_mov -= 1;
+	CLASP(app->game.player.x_mov);
+	CLASP(app->game.player.y_mov);
 	return (0);
 }
 
@@ -55,5 +59,7 @@ int	on_key_release(int key, void *param)
 		app->game.player.x_mov -= 1;
 	else if (key == MLX_KEY_A)
 		app->game.player.x_mov += 1;
+	CLASP(app->game.player.x_mov);
+	CLASP(app->game.player.y_mov);
 	return (0);
 }
