@@ -21,7 +21,7 @@
 void	get_screen(t_app *app)
 {
 	app->screen.height = IMG_SIZE * 9 * SCALE;
-	app->screen.width = IMG_SIZE * (9 + 3) * SCALE;
+	app->screen.width = IMG_SIZE * 9 * SCALE;
 	app->screen.title = ft_strdup("chips");
 }
 
