@@ -6,7 +6,7 @@
 /*   By: fletcher <fletcher@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/11 19:19:34 by mgueifao          #+#    #+#             */
-/*   Updated: 2022/03/16 15:15:14 by fletcher         ###   ########.fr       */
+/*   Updated: 2022/03/16 16:58:30 by fletcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ typedef struct s_player
 	int	y;
 	int	x_mov;
 	int	y_mov;
+	int	x_ice;
+	int	y_ice;
 	int	dir;
 	int	dead;
 }				t_player;

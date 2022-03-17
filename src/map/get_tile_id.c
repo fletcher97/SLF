@@ -6,7 +6,7 @@
 /*   By: fletcher <fletcher@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 15:39:10 by fletcher          #+#    #+#             */
-/*   Updated: 2022/03/16 15:45:37 by fletcher         ###   ########.fr       */
+/*   Updated: 2022/03/16 19:04:37 by fletcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	is_solid(char c)
 {
 	return (c == WALL || c == GATE || c == RDOOR || c == GDOOR || c == BDOOR
-		|| c == YDOOR);
+		|| c == YDOOR || c == CDL || c == CLU || c == CUR || c == CRD);
 }
 
 int get_tile_id(char c)
@@ -52,5 +52,34 @@ int get_tile_id(char c)
 		return 101;
 	if (c == YDOOR)
 		return 102;
+
+	if (c == PUP)
+		return 114;
+	if (c == PDOWN)
+		return 112;
+	if (c == PLEFT)
+		return 113;
+	if (c == PRIGHT)
+		return 115;
+
+	if (c == ICE)
+		return 105;
+	if (c == CLU)
+		return 110;
+	if (c == CUR)
+		return 111;
+	if (c == CRD)
+		return 108;
+	if (c == CDL)
+		return 109;
+
+	if (c == IBOOT)
+		return 24;
+	if (c == PBOOT)
+		return 25;
+	if (c == FBOOT)
+		return 26;
+	if (c == WBOOT)
+		return 27;
 	return 80;
 }
