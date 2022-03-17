@@ -17,6 +17,8 @@
 #include "logic.h"
 #include "gui.h"
 #include "map.h"
+#include <stdio.h>
+#include <math.h>
 
 void	get_screen(t_app *app)
 {
@@ -108,17 +110,46 @@ static void	put_tile_offset(t_screen *screen, int x, int y, int id)
 			int color;
 			get_color(tiles, tx, ty, &color);
 			my_mlx_pixel_put(screen->img[1],
-							x * IMG_SIZE  * SCALE + j * SCALE,
-							y * IMG_SIZE  * SCALE + i * SCALE,
+							(x * IMG_SIZE  * SCALE + j * SCALE) + IMG_SIZE * floor(SCALE/2),
+							(y * IMG_SIZE  * SCALE + i * SCALE) + IMG_SIZE * floor(SCALE/2),
 							color);
 		}
 	}
 }
 
+static int	get_inv_id(t_app *app, int x, int y)
+{
+	if (x == 9)
+	{
+		if (y == 2 && app->game.player.inv.rkey)
+			return (get_tile_id(RKEY));
+		else if (y == 3 && app->game.player.inv.gkey)
+			return (get_tile_id(GKEY));
+		else if (y == 4 && app->game.player.inv.bkey)
+			return (get_tile_id(BKEY));
+		else if (y == 5 && app->game.player.inv.ykey)
+			return (get_tile_id(YKEY));
+	}
+	else if (x == 10)
+	{
+		if (y == 2 && (app->game.player.inv.boots & ICE_BOOT))
+			return (get_tile_id(IBOOT));
+		else if (y == 3 && (app->game.player.inv.boots & PUSH_BOOT))
+			return (get_tile_id(PBOOT));
+		else if (y == 4 && (app->game.player.inv.boots & FIRE_BOOT))
+			return (get_tile_id(FBOOT));
+		else if (y == 5 && (app->game.player.inv.boots & WATER_BOOT))
+			return (get_tile_id(WBOOT));
+	}
+	return (get_tile_id(VOID));
+}
+
+
 void	render_inventory(t_app *app)
 {
 	int	i;
 	int	j;
+	int	id;
 
 	// The inventory gui will be at:
 	// 0 0 0 |0
@@ -139,9 +170,12 @@ void	render_inventory(t_app *app)
 	{
 		j = 0;
 		while (j < 9)
-		{
+		{	
 			if (i < 11 && j < 6 && j > 1)
-				put_tile_offset(&app->screen, j, i, get_tile_id(BLOCK));
+			{
+				id = get_inv_id(app, i, j);
+				put_tile_offset(&app->screen, i, j, id);
+			}
 			j++;
 		}
 		i++;
