@@ -89,6 +89,66 @@ void	render_enteties(t_app *app)
 	render_player(app);
 }
 
+static void	put_tile_offset(t_screen *screen, int x, int y, int id)
+{
+	int		i;
+	int		j;
+	int		tx;
+	int		ty;
+	t_img	*tiles;
+
+	i = -1;
+	tiles = screen->tiles;
+	while (++i < IMG_SIZE)
+	{
+		j = -1;
+		while (++j < IMG_SIZE) {
+			tx = (id % 8) * IMG_SIZE + j;
+			ty = (id / 8) * IMG_SIZE + i;
+			int color;
+			get_color(tiles, tx, ty, &color);
+			my_mlx_pixel_put(screen->img[1],
+							x * IMG_SIZE  * SCALE + j * SCALE,
+							y * IMG_SIZE  * SCALE + i * SCALE,
+							color);
+		}
+	}
+}
+
+void	render_inventory(t_app *app)
+{
+	int	i;
+	int	j;
+
+	// The inventory gui will be at:
+	// 0 0 0 |0
+	// 0 0 0 |1
+	// 0 x x |2
+	// 0 x x |3
+	// 0 x x |4   I
+	// 0 x x |5
+	// 0 0 0 |6 
+	// 0 0 0 |7
+	// 0 0 0 |8
+	// -------
+	// 9 10 11 
+	//    J
+
+	i = 9;
+	while (i < 12)
+	{
+		j = 0;
+		while (j < 9)
+		{
+			if (i < 11 && j < 6 && j > 1)
+				put_tile_offset(&app->screen, j, i, get_tile_id(BLOCK));
+			j++;
+		}
+		i++;
+	}
+}
+	
+
 void	render(t_app *app)
 {
 	int		i;
@@ -115,6 +175,7 @@ void	render(t_app *app)
 		}
 	}
 	render_enteties(app);
+	render_inventory(app);
 	tmp = app->screen.img[1];
 	app->screen.img[1] = app->screen.img[0];
 	app->screen.img[0] = tmp;
