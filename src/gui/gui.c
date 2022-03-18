@@ -13,6 +13,8 @@
 #include "mlx.h"
 
 #include "ft_string.h"
+#include "ft_conv.h"
+#include "ft_stdlib.h"
 
 #include "logic.h"
 #include "gui.h"
@@ -151,20 +153,6 @@ void	render_inventory(t_app *app)
 	int	j;
 	int	id;
 
-	// The inventory gui will be at:
-	// 0 0 0 |0
-	// 0 0 0 |1
-	// 0 x x |2
-	// 0 x x |3
-	// 0 x x |4   I
-	// 0 x x |5
-	// 0 0 0 |6 
-	// 0 0 0 |7
-	// 0 0 0 |8
-	// -------
-	// 9 10 11 
-	//    J
-
 	i = 9;
 	while (i < 12)
 	{
@@ -214,4 +202,17 @@ void	render(t_app *app)
 	app->screen.img[1] = app->screen.img[0];
 	app->screen.img[0] = tmp;
 	mlx_put_image_to_window(app->mlx, app->screen.win, app->screen.img[0]->img, 0, 0);
+	mlx_string_put(app->mlx,app->screen.win,
+					9 * IMG_SIZE * SCALE + ((IMG_SIZE * SCALE) / 1.5),
+					1 * IMG_SIZE * SCALE + floor((IMG_SIZE * SCALE) / 2),
+					0xffffff,
+					"CHIPS LEFT:");
+	char *s = ft_itoa(app->game.coll_left);
+	int len = ft_strlen(s);
+	mlx_string_put(app->mlx,app->screen.win,
+					9 * IMG_SIZE * SCALE + ((IMG_SIZE * SCALE) / 0.75),
+					1 * IMG_SIZE * SCALE + floor((IMG_SIZE * SCALE)) - len,
+					0xffffff,
+					s);
+	ft_free(s);
 }
