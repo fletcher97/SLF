@@ -6,7 +6,7 @@
 /*   By: fletcher <fletcher@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 14:08:35 by fletcher          #+#    #+#             */
-/*   Updated: 2022/03/17 10:42:38 by fletcher         ###   ########.fr       */
+/*   Updated: 2022/03/18 12:50:03 by fletcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,12 +258,16 @@ void update_player(t_game *g)
 	{
 		g->player.dir = new_x > g->player.x ? 3 : 1;
 		g->player.x = new_x;
+		g->player.x_ice = 0;
+		g->player.y_ice = 0;
 		proc_ice(g);
 	}
 	else if (new_y != g->player.y && new_y >= 0 && new_y < g->height && can_walk(g->player.x, new_y, g) && (!is_ice(g, g->player.x, g->player.y) || g->player.inv.boots & ICE_BOOT))
 	{
 		g->player.dir = new_y > g->player.y ? 0 : 2;
 		g->player.y = new_y;
+		g->player.x_ice = 0;
+		g->player.y_ice = 0;
 		proc_ice(g);
 	}
 	else if (f != 1)
