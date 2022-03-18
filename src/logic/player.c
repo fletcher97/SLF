@@ -74,6 +74,14 @@ static int can_walk(int x, int y, t_game *g)
 	return (0);
 }
 
+void proc_static(t_game * g)
+{
+	if (g->map[g->player.y][g->player.x] == WATER && !(g->player.inv.boots & WATER_BOOT))
+		g->player.dead = 1;
+	if (g->map[g->player.y][g->player.x] == FIRE && !(g->player.inv.boots & FIRE_BOOT))
+		g->player.dead = 1;
+}
+
 void proc_doors(t_game *g)
 {
 	if (g->map[g->player.y][g->player.x] == RDOOR && g->player.inv.rkey)
@@ -298,11 +306,14 @@ void update_player(t_game *g)
 		proc_doors(g);
 		// collect key
 		proc_items(g);
-
+		proc_static(g);
 	}
 }
 
 void render_player(t_app *a)
 {
-	put_tile(&a->screen, 4, 4, a->game.player.dir + 4);
+	if (a->game.map[a->game.player.y][a->game.player.x] == WATER)
+		put_tile(&a->screen, 4, 4, a->game.player.dir + 8);
+	else
+		put_tile(&a->screen, 4, 4, a->game.player.dir + 4);
 }
