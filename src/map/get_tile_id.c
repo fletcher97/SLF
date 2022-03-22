@@ -6,7 +6,7 @@
 /*   By: fletcher <fletcher@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 15:39:10 by fletcher          #+#    #+#             */
-/*   Updated: 2022/03/17 17:28:20 by fletcher         ###   ########.fr       */
+/*   Updated: 2022/03/18 14:19:54 by fletcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 int	is_solid(char c)
 {
 	return (c == WALL || c == GATE || c == RDOOR || c == GDOOR || c == BDOOR
-		|| c == YDOOR || c == CDL || c == CLU || c == CUR || c == CRD);
+		|| c == YDOOR || c == CDL || c == CLU || c == CUR || c == CRD
+		|| c == BLOCK);
 }
 
 int is_enemy(char c)
