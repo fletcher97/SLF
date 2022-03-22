@@ -6,7 +6,7 @@
 /*   By: fletcher <fletcher@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 14:08:35 by fletcher          #+#    #+#             */
-/*   Updated: 2022/03/17 10:42:38 by fletcher         ###   ########.fr       */
+/*   Updated: 2022/03/18 12:50:03 by fletcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,14 @@ static int can_walk(int x, int y, t_game *g)
 		return (1);
 
 	return (0);
+}
+
+void proc_static(t_game * g)
+{
+	if (g->map[g->player.y][g->player.x] == WATER && !(g->player.inv.boots & WATER_BOOT))
+		g->player.dead = 1;
+	if (g->map[g->player.y][g->player.x] == FIRE && !(g->player.inv.boots & FIRE_BOOT))
+		g->player.dead = 1;
 }
 
 void proc_doors(t_game *g)
@@ -258,12 +266,16 @@ void update_player(t_game *g)
 	{
 		g->player.dir = new_x > g->player.x ? 3 : 1;
 		g->player.x = new_x;
+		g->player.x_ice = 0;
+		g->player.y_ice = 0;
 		proc_ice(g);
 	}
 	else if (new_y != g->player.y && new_y >= 0 && new_y < g->height && can_walk(g->player.x, new_y, g) && (!is_ice(g, g->player.x, g->player.y) || g->player.inv.boots & ICE_BOOT))
 	{
 		g->player.dir = new_y > g->player.y ? 0 : 2;
 		g->player.y = new_y;
+		g->player.x_ice = 0;
+		g->player.y_ice = 0;
 		proc_ice(g);
 	}
 	else if (f != 1)
@@ -294,11 +306,14 @@ void update_player(t_game *g)
 		proc_doors(g);
 		// collect key
 		proc_items(g);
-
+		proc_static(g);
 	}
 }
 
 void render_player(t_app *a)
 {
-	put_tile(&a->screen, 4, 4, a->game.player.dir + 4);
+	if (a->game.map[a->game.player.y][a->game.player.x] == WATER)
+		put_tile(&a->screen, 4, 4, a->game.player.dir + 8);
+	else
+		put_tile(&a->screen, 4, 4, a->game.player.dir + 4);
 }

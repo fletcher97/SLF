@@ -6,7 +6,7 @@
 /*   By: fletcher <fletcher@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/11 19:39:50 by mgueifao          #+#    #+#             */
-/*   Updated: 2022/03/13 19:21:39 by fletcher         ###   ########.fr       */
+/*   Updated: 2022/03/17 16:42:43 by fletcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,23 +51,47 @@ static t_enemy *new_enemy(char type, int x, int y)
 	ret = ft_calloc(1, sizeof(t_enemy));
 	ret->x = x;
 	ret->y = y;
-	if (type == ENEM_A)
+	if (is_spider(type))
 	{
-		ret->update = update_a;
-		ret->render = render_a;
-		ret->type = 1;
+		ret->update = update_spider;
+		ret->render = render_spider;
+		ret->dir = dir_spider(type);
 	}
-	if (type == ENEM_B)
+	else if (is_tank(type))
 	{
-		ret->update = update_b;
-		ret->render = render_b;
-		ret->type = 2;
+		ret->update = update_tank;
+		ret->render = render_tank;
+		ret->dir = dir_tank(type);
 	}
-	if (type == ENEM_C)
+	else if (is_ship(type))
 	{
-		ret->update = update_c;
-		ret->render = render_c;
-		ret->type = 3;
+		ret->update = update_ship;
+		ret->render = render_ship;
+		ret->dir = dir_ship(type);
+	}
+	else if (is_jaws(type))
+	{
+		ret->update = update_jaws;
+		ret->render = render_jaws;
+		ret->dir = dir_jaws(type);
+	}
+	else if (is_fireball(type))
+	{
+		ret->update = update_fireball;
+		ret->render = render_fireball;
+		ret->dir = dir_fireball(type);
+	}
+	else if (is_ball(type))
+	{
+		ret->update = update_ball;
+		ret->render = render_ball;
+		ret->dir = dir_ball(type);
+	}
+	else if (is_paramecium(type))
+	{
+		ret->update = update_paramecium;
+		ret->render = render_paramecium;
+		ret->dir = dir_paramecium(type);
 	}
 	return ret;
 }
@@ -91,8 +115,7 @@ static int	map_read_cont(t_game *game)
 				game->player.y = i;
 				game->player.dir = LEFT;
 			}
-			else if (game->map[i][j] == ENEM_A || game->map[i][j] == ENEM_B
-				|| game->map[i][j] == ENEM_C)
+			else if (is_enemy(game->map[i][j]))
 			{
 				enemy = new_enemy(game->map[i][j], j, i);
 				ft_lstadd_back(&game->enemy, ft_lstnew(enemy));

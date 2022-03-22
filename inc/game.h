@@ -6,7 +6,7 @@
 /*   By: fletcher <fletcher@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/11 19:19:34 by mgueifao          #+#    #+#             */
-/*   Updated: 2022/03/16 16:58:30 by fletcher         ###   ########.fr       */
+/*   Updated: 2022/03/17 15:34:52 by fletcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,8 @@ typedef struct s_enemy
 	int x;
 	int y;
 	int dir;
-	int	type;
 	int (*update)(void *, void *);
-	int (*render)(void *, int, int);
+	int (*render)(void *, void *);
 }				t_enemy;
 
 typedef struct s_inventory

@@ -6,7 +6,7 @@
 /*   By: fletcher <fletcher@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 15:17:41 by fletcher          #+#    #+#             */
-/*   Updated: 2022/03/16 14:17:58 by fletcher         ###   ########.fr       */
+/*   Updated: 2022/03/17 15:38:39 by fletcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,7 @@ void	render_enteties(t_app *app)
 	while (enemies)
 	{
 		enemy = (t_enemy*)enemies->content;
-		enemy->render(app, enemy->x + (4 - app->game.player.x),
-			enemy->y + (4 - app->game.player.y));
+		enemy->render(app, enemy);
 		enemies = enemies->next;
 	}
 	render_player(app);
