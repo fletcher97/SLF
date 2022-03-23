@@ -16,7 +16,7 @@
 # include "game.h"
 
 # define IMG_SIZE 32
-# define SCALE 2
+# define SCALE 3
 
 typedef struct s_pos
 {
