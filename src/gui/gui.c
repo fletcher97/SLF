@@ -157,7 +157,7 @@ void	render_inventory(t_app *app)
 	{
 		j = 0;
 		while (j < 9)
-		{	
+		{
 			if (i < 11 && j < 6 && j > 1)
 			{
 				id = get_inv_id(app, i, j);
@@ -168,7 +168,6 @@ void	render_inventory(t_app *app)
 		i++;
 	}
 }
-	
 
 void	render(t_app *app)
 {
